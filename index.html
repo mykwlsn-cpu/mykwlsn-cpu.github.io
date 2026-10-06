@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Roman's Road</title>
+    <!-- Use Tailwind CSS via CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Apply a default font family and dark background color */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1f2937; /* A dark gray background */
+        }
+        /* Custom styles for the card, now in a darker shade */
+        .card {
+            background-color: #374151; /* A slightly lighter dark gray for the card */
+            border-radius: 1.5rem; /* rounded-3xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            padding: 2.5rem; /* p-10 */
+        }
+        /* Custom styles for the buttons */
+        .btn-base {
+            padding: 0.75rem 1.5rem; /* py-3 px-6 */
+            border-radius: 9999px; /* rounded-full */
+            font-weight: 600; /* font-semibold */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-next {
+            background-color: #10b981; /* emerald-500 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.5);
+        }
+        .btn-next:hover {
+            background-color: #059669; /* emerald-600 */
+        }
+        .btn-back {
+            background-color: #6b7280; /* A darker gray for the back button */
+            color: #f3f4f6; /* Light text for visibility */
+            box-shadow: 0 4px 6px -1px rgba(107, 114, 128, 0.5);
+        }
+        .btn-back:hover {
+            background-color: #4b5563; /* Even darker on hover */
+        }
+        .btn-start-over {
+            background-color: #4b5563; /* A dark gray for the start over button */
+            color: white;
+        }
+        .btn-start-over:hover {
+            background-color: #374151; /* Even darker on hover */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div id="content" class="card max-w-2xl w-full text-center">
+        <!-- Main title -->
+        <h1 class="text-3xl sm:text-4xl font-bold text-gray-100 mb-6">The Roman's Road</h1>
+        
+        <!-- The introductory paragraph, now with an ID and a hidden class for dynamic control -->
+        <p id="intro-paragraph" class="text-gray-300 mb-8 hidden">
+            This guide will walk you through the path of salvation, a series of verses from the Bible's book of Romans.
+        </p>
+
+        <!-- Dynamic content area -->
+        <div id="step-container">
+            <!-- This will be populated by the JS -->
+        </div>
+        
+        <!-- Navigation buttons container, always side-by-side -->
+        <div class="flex justify-center items-center space-x-4 mt-8">
+            <!-- Back button, initially hidden -->
+            <button id="back-button" class="btn-base btn-back hidden">Back</button>
+            <!-- Next button -->
+            <button id="next-button" class="btn-base btn-next">Next</button>
+        </div>
+    </div>
+
+    <script>
+        // Array of objects to store each step of the Roman's Road
+        const steps = [
+            // Roman's Road Steps
+            {
+                title: "All Have Sinned",
+                reference: "Romans 3:23, Romans 3:10, Isaiah 53:6",
+                verse: "For all have sinned and fall short of the glory of God.<br/><br/>As it is written: 'There is no one righteous, not even one.'<br/><br/>All of us, like sheep, have strayed away; we have left God's paths to follow our own.",
+                explanation: "The Bible teaches that every person has sinned, meaning we have all done things that displease God. No one is perfect, and our sin separates us from God."
+            },
+            {
+                title: "The Penalty of Sin",
+                reference: "Romans 6:23a, Romans 5:12, James 1:15",
+                verse: "For the wages of sin is death...<br/><br/>Therefore, just as sin entered the world through one man, and death through sin, and in this way death came to all people, because all sinned.<br/><br/>Then, after desire has conceived, it gives birth to sin; and sin, when it is full-grown, gives birth to death.",
+                explanation: "Sin has a consequence, or a 'wage.' That consequence is spiritual death and separation from God, not just in this life, but for all eternity."
+            },
+            {
+                title: "God's Provision",
+                reference: "Romans 6:23b, John 3:16, Ephesians 2:8-9",
+                verse: "...but the gift of God is eternal life in Christ Jesus our Lord.<br/><br/>For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.<br/><br/>For it is by grace you have been saved, through faith—and this is not from yourselves, it is the gift of God—not by works, so that no one can boast.",
+                explanation: "Even though we deserve death because of our sin, God has provided a way out. He offers us a free gift: eternal life through His Son, Jesus Christ."
+            },
+            {
+                title: "God's Love",
+                reference: "Romans 5:8, 1 John 4:10, John 15:13",
+                verse: "But God demonstrates his own love for us in this: While we were still sinners, Christ died for us.<br/><br/>This is love: not that we loved God, but that he loved us and sent his Son as an atoning sacrifice for our sins.<br/><br/>Greater love has no one than this: to lay down one's life for one's friends.",
+                explanation: "God's love for us is so great that He sent Jesus to die for our sins while we were still separated from Him. Jesus took our punishment on the cross."
+            },
+            {
+                title: "The Call to Salvation",
+                reference: "Romans 10:9-10, Acts 4:12, John 14:6",
+                verse: "If you declare with your mouth, “Jesus is Lord,” and believe in your heart that God raised him from the dead, you will be saved. For it is with your heart that you believe and are justified, and it is with your mouth that you profess your faith and are saved.<br/><br/>Salvation is found in no one else, for there is no other name under heaven given to mankind by which we must be saved.<br/><br/>Jesus answered, 'I am the way and the truth and the life. No one comes to the Father except through me.'",
+                explanation: "To receive this gift of salvation, we must believe in Jesus and confess Him as our Lord. It's a matter of the heart and a public declaration."
+            },
+            {
+                title: "The Promise",
+                reference: "Romans 10:13, John 1:12, 2 Corinthians 5:17",
+                verse: "For everyone who calls on the name of the Lord will be saved.<br/><br/>Yet to all who did receive him, to those who believed in his name, he gave the right to become children of God.<br/><br/>Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!",
+                explanation: "This is a wonderful promise! Anyone, regardless of their past, can be saved by simply calling out to God and trusting in Jesus."
+            },
+            // Prayer of Commitment Step
+            {
+                title: "A Prayer of Commitment",
+                reference: "A prayer to receive Jesus Christ as your Savior and Lord:",
+                verse: "Dear God, I know that I am a sinner. I believe that Jesus died on the cross for my sins and rose again. I want to turn from my sins and invite Jesus to come into my heart and life as my Lord and Savior. Thank You for forgiving my sins and giving me eternal life. In Jesus' name, Amen.",
+                explanation: "If you prayed that prayer and meant it from your heart, God has forgiven your sins and you have the promise of eternal life. Your journey has just begun!"
+            },
+            // Transition screen to next steps
+            {
+                title: "What's Next?",
+                reference: "Congratulations!",
+                verse: "",
+                explanation: "If you have prayed and believed in Jesus for your salvation, you are now a new creation in Christ. The Bible says all things are new. Your journey has just begun. The acronym P.R.A.Y.E.R.S. is a simple guide to help you get started on your new life with Christ."
+            },
+            // P.R.A.Y.E.R.S. Steps
+            {
+                title: "P: Pray",
+                reference: "1 Thessalonians 5:17, Philippians 4:6-7",
+                verse: "Pray without ceasing.<br/><br/>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.",
+                explanation: "Prayer is a conversation with God. You can talk to Him about anything—your joys, your fears, and your needs. He loves to hear from you and wants to be a part of your daily life."
+            },
+            {
+                title: "R: Repent",
+                reference: "Acts 3:19, 2 Peter 3:9",
+                verse: "Repent, then, and turn to God, so that your sins may be wiped out, that times of refreshing may come from the Lord.<br/><br/>The Lord is not slow in keeping his promise, as some understand slowness. Instead he is patient with you, not wanting anyone to perish, but everyone to come to repentance.",
+                explanation: "Repentance means turning away from a life of sin and toward a life of following God. It's an ongoing process of aligning your heart and actions with His will."
+            },
+            {
+                title: "A: Attend Church",
+                reference: "Hebrews 10:24-25, Romans 12:4-5",
+                verse: "And let us consider how we may spur one another on toward love and good deeds, not giving up meeting together, as some are in the habit of doing, but encouraging one another—and all the more as you see the Day approaching.<br/><br/>For just as each of us has one body with many members, and these members do not all have the same function, so in Christ we, though many, form one body, and each member belongs to all the others.",
+                explanation: "Attending church and being part of a local Christian community is vital. It’s where you can grow in your faith, find encouragement, and worship with other believers."
+            },
+            {
+                title: "Y: Yell it from the rooftops",
+                reference: "Romans 1:16, Matthew 28:19-20",
+                verse: "For I am not ashamed of the gospel, because it is the power of God that brings salvation to everyone who believes...<br/><br/>Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, and teaching them to obey everything I have commanded you.",
+                explanation: "Don’t be afraid to share your faith with others! Your story of how God has changed your life can be a powerful testimony. Let your life be a witness to His goodness."
+            },
+            {
+                title: "E: Expect attacks from Satan",
+                reference: "1 Peter 5:8, Ephesians 6:11",
+                verse: "Be alert and of sober mind. Your enemy the devil prowls around like a roaring lion looking for someone to devour.<br/><br/>Put on the full armor of God, so that you can take your stand against the devil’s schemes.",
+                explanation: "As a follower of Christ, you can expect spiritual opposition. The enemy will try to discourage you, but remember that God is greater. Stay close to Him and His Word."
+            },
+            {
+                title: "R: Read your Bible",
+                reference: "2 Timothy 3:16-17, Psalm 119:105",
+                verse: "All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness, so that the servant of God may be thoroughly equipped for every good work.<br/><br/>Your word is a lamp for my feet, a light on my path.",
+                explanation: "Reading the Bible is how you get to know God better and understand His will for your life. It's your guide for living and a source of wisdom and strength."
+            },
+            {
+                title: "S: Serve",
+                reference: "Mark 10:45, Galatians 5:13",
+                verse: "For even the Son of Man did not come to be served, but to serve, and to give his life as a ransom for many.<br/><br/>You, my brothers and sisters, were called to be free. But do not use your freedom to indulge the flesh; rather, serve one another humbly in love.",
+                explanation: "Jesus set the ultimate example of serving others. Look for opportunities to serve in your church and community. Serving is a way to show God's love to the world."
+            },
+            // PRAYERS Review Screen
+            {
+                title: "P.R.A.Y.E.R.S. Acronym Review",
+                reference: "A quick review of the steps:",
+                verse: "P: **Pray** - A conversation with God.<br/><br/>R: **Repent** - Turning from sin and toward God.<br/><br/>A: **Attend Church** - Growing in a community of believers.<br/><br/>Y: **Yell it from the rooftops** - Sharing your faith with others.<br/><br/>E: **Expect attacks** from Satan - Being prepared for spiritual opposition.<br/><br/>R: **Read your Bible** - Getting to know God through His Word.<br/><br/>S: **Serve** - Showing God's love to others.",
+                explanation: "Remembering these simple steps can help you stay on the path as you begin your new life with Christ."
+            },
+            // Final Prayer of Support
+            {
+                title: "A Prayer for You",
+                reference: "Praying for your new journey",
+                verse: "Heavenly Father, we thank you for this new life in Christ. We pray that you would guide, protect, and strengthen this new believer every step of the way. Fill them with your Holy Spirit, give them a hunger for your Word, and connect them with a loving community of believers. Keep them safe from all harm and give them boldness to share their faith. In Jesus' name we pray, Amen.",
+                explanation: "We are so excited for you and your new relationship with Jesus! Remember, you are not alone on this journey. God is always with you, and there is a family of believers ready to support you. You can continue to grow in your faith!"
+            },
+            // Final step to loop back to the beginning
+            {
+                title: "Start Over",
+                reference: "Continue to grow in your faith!",
+                verse: "",
+                explanation: "You can go through this guide again, or simply start from the beginning. We pray for you on your new journey with Jesus Christ!"
+            }
+        ];
+
+        let currentStep = 0;
+        
+        const stepContainer = document.getElementById('step-container');
+        const nextButton = document.getElementById('next-button');
+        const backButton = document.getElementById('back-button');
+        const introParagraph = document.getElementById('intro-paragraph');
+
+        // Function to render the current step's content
+        function renderStep() {
+            // Get the data for the current step
+            const stepData = steps[currentStep];
+
+            // Clear previous content
+            stepContainer.innerHTML = '';
+
+            // Dynamically show or hide the intro paragraph based on the current step
+            if (currentStep === 0) {
+                introParagraph.classList.remove('hidden');
+            } else {
+                introParagraph.classList.add('hidden');
+            }
+
+            // Create and append elements for the current step
+            const title = document.createElement('h2');
+            title.className = 'text-2xl font-semibold text-gray-200 mb-2';
+            title.textContent = stepData.title;
+            stepContainer.appendChild(title);
+
+            const reference = document.createElement('p');
+            reference.className = 'text-lg font-medium text-gray-400 mb-4';
+            reference.textContent = stepData.reference;
+            stepContainer.appendChild(reference);
+
+            if (stepData.verse) {
+                const verse = document.createElement('blockquote');
+                verse.className = 'bg-gray-700 italic border-l-4 border-emerald-500 text-gray-200 p-4 mb-6 rounded-md';
+                // Using innerHTML to correctly render the line breaks (<br>)
+                verse.innerHTML = stepData.verse; 
+                stepContainer.appendChild(verse);
+            }
+
+            const explanation = document.createElement('p');
+            explanation.className = 'text-gray-200 leading-relaxed';
+            explanation.textContent = stepData.explanation;
+            stepContainer.appendChild(explanation);
+            
+            // Logic to update button text and visibility
+            if (currentStep === steps.length - 1) {
+                nextButton.textContent = "Start Over";
+                nextButton.classList.remove('btn-next');
+                nextButton.classList.add('btn-start-over');
+                // Removed the line that previously hid the back button on this step.
+            } else {
+                nextButton.textContent = "Next";
+                nextButton.classList.remove('btn-start-over');
+                nextButton.classList.add('btn-next');
+                // Show back button only if we are past the first step
+                if (currentStep > 0) {
+                    backButton.classList.remove('hidden');
+                } else {
+                    backButton.classList.add('hidden');
+                }
+            }
+        }
+
+        // Add event listener to the "Next" button
+        nextButton.addEventListener('click', () => {
+            // Check if we are on the final step
+            if (currentStep === steps.length - 1) {
+                // If so, reset to the first step
+                currentStep = 0;
+            } else {
+                // Otherwise, move to the next step
+                currentStep++;
+            }
+            // Render the content for the new step
+            renderStep();
+        });
+
+        // Add event listener to the "Back" button
+        backButton.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                renderStep();
+            }
+        });
+
+        // Initial render on page load
+        document.addEventListener('DOMContentLoaded', renderStep);
+    </script>
+</body>
+</html>
